@@ -1,0 +1,54 @@
+// Mochila.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
+//
+
+#include <iostream>
+using namespace std;
+//n es 
+//M es el peso total 
+//p es el peso de cada artículo
+//b es el beneficio
+//
+//
+//
+int mayor(int x, int y) {
+    if (x > y) {
+        return x;
+    }
+    return y;
+}
+//int crearmat(int x, int y) {}
+void mochila(int n,int m,int p[],int b[]) {
+    int mat[4][7];
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 7; j++) {
+            mat[i][j] = 0;
+        }
+    }
+
+    for (int i = 1; i < n+1; i++) {
+        for (int j = 1; j < m+1; j++) {
+            if (p[i-1] <= j) {
+                mat[i][j] = mayor( b[i-1] + mat[i - 1][ j - p[i-1]] , mat[i-1][j] );
+            }
+            else {
+                mat[i][j] = mat[i - 1][j];
+            }
+        }
+    }
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 7; j++) {
+            cout << mat[i][j]<<" ";
+        }
+        cout << endl;
+    }
+
+}
+
+
+int main()
+{
+
+    int p[] = { 2,3,4 };
+    int b[] = { 1,2,5 };
+    mochila(3,6,p,b);
+}

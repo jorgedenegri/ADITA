@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+struct Objeto {
+    int peso;
+    int beneficio;
+};
+
+int maxBeneficio(const std::vector<Objeto>& objetos, int capacidad) {
+    int n = objetos.size();
+    std::vector<std::vector<int>> dp(n + 1, std::vector<int>(capacidad + 1, 0));
+
+    for (int i = 1; i <= n; i++) {
+        for (int w = 1; w <= capacidad; w++) {
+            if (objetos[i - 1].peso <= w) {
+                dp[i][w] = std::max(objetos[i - 1].beneficio + dp[i - 1][w - objetos[i - 1].peso], dp[i - 1][w]);
+            } else {
+                dp[i][w] = dp[i - 1][w];
+            }
+        }
+    }
+
+    return dp[n][capacidad];
+}
+
+int main() {
+    std::vector<Objeto> objetos = {
+        {3, 12},
+        {7, 3},
+        {4, 7},
+        {2, 4},
+        {1, 3},
+        {6, 8}
+    };
+    int capacidad = 15;
+
+    int max_beneficio = maxBeneficio(objetos, capacidad);
+
+    std::cout << "El beneficio máximo obtenido es: " << max_beneficio << std::endl;
+
+    return 0;
+}

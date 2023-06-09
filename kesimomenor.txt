@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+//Diseñe un algoritmo "divide y vencerás" que permita calcular el k−ésimo menor elemento de un vector.
+// Función auxiliar para intercambiar dos elementos en un vector
+void swap(std::vector<int>& arr, int i, int j) {
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
+// Función auxiliar para encontrar la posición del pivote utilizando el algoritmo de partición de Hoare
+int partition(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high]; // Tomamos el último elemento como pivote
+    int i = low - 1;
+
+    for (int j = low; j < high; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            swap(arr, i, j);
+        }
+    }
+
+    swap(arr, i + 1, high);
+    return i + 1;
+}
+
+// Función principal para encontrar el k-ésimo menor elemento utilizando el algoritmo "divide y vencerás"
+int kthSmallest(std::vector<int>& arr, int low, int high, int k) {
+    if (k > 0 && k <= high - low + 1) {
+        int pos = partition(arr, low, high);
+
+        if (pos - low == k - 1)
+            return arr[pos];
+        else if (pos - low > k - 1)
+            return kthSmallest(arr, low, pos - 1, k);
+        else
+            return kthSmallest(arr, pos + 1, high, k - pos + low - 1);
+    }
+
+    return -1; // Valor sentinela en caso de error
+}
+
+int main() {
+    std::vector<int> arr = { 7, 10, 4, 3, 20, 15 };
+    int k = 3; // Calcular el tercer elemento más pequeño
+
+    int result = kthSmallest(arr, 0, arr.size() - 1, k);
+    if (result != -1)
+        std::cout << "El " << k << "-ésimo menor elemento es: " << result << std::endl;
+    else
+        std::cout << "Error: el valor de k es inválido." << std::endl;
+
+    return 0;
+}
