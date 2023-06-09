@@ -1,0 +1,86 @@
+#include <iostream>
+
+// Función para combinar dos subarreglos ordenados en un solo arreglo ordenado
+void merge(int arr[], int left, int mid, int right) {
+    int n1 = mid - left + 1;    // Tamaño del primer subarreglo
+    int n2 = right - mid;       // Tamaño del segundo subarreglo
+
+    // Crear subarreglos temporales
+    int leftArr[n1];
+    int rightArr[n2];
+
+    // Copiar los elementos a los subarreglos temporales
+    for (int i = 0; i < n1; i++) {
+        leftArr[i] = arr[left + i];
+    }
+    for (int j = 0; j < n2; j++) {
+        rightArr[j] = arr[mid + 1 + j];
+    }
+
+    // Combinar los subarreglos en un solo arreglo ordenado
+    int i = 0;     // Índice para recorrer el subarreglo izquierdo
+    int j = 0;     // Índice para recorrer el subarreglo derecho
+    int k = left;  // Índice para recorrer el arreglo original
+
+    while (i < n1 && j < n2) {
+        if (leftArr[i] <= rightArr[j]) {
+            arr[k] = leftArr[i];
+            i++;
+        } else {
+            arr[k] = rightArr[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copiar los elementos restantes del subarreglo izquierdo, si los hay
+    while (i < n1) {
+        arr[k] = leftArr[i];
+        i++;
+        k++;
+    }
+
+    // Copiar los elementos restantes del subarreglo derecho, si los hay
+    while (j < n2) {
+        arr[k] = rightArr[j];
+        j++;
+        k++;
+    }
+}
+
+// Función de división y recursión para realizar el Merge Sort
+void mergeSort(int arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;   // Calcular el punto medio
+
+        // Dividir y ordenar recursivamente los subarreglos
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        // Combinar los subarreglos ordenados
+        merge(arr, left, mid, right);
+    }
+}
+
+// Función auxiliar para imprimir el arreglo
+void printArray(const int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[] = {8, 3, 1, 5, 9, 2, 6, 4, 7};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    std::cout << "Arreglo original: ";
+    printArray(arr, n);
+
+    mergeSort(arr, 0, n - 1);
+
+    std::cout << "Arreglo ordenado: ";
+    printArray(arr, n);
+
+    return 0;
+}
